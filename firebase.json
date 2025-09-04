@@ -1,0 +1,1 @@
+{"flutter":{"platforms":{"android":{"default":{"projectId":"coffee-app-mvp","appId":"1:99193334676:android:8791138d3c0812679b7d81","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"coffee-app-mvp","configurations":{"android":"1:99193334676:android:8791138d3c0812679b7d81","web":"1:99193334676:web:f64ea6e3fbd0ba619b7d81"}}}}}}
