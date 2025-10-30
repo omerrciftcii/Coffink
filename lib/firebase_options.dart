@@ -60,7 +60,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDT0f0IEf_mriakTa_Cb0rB3z74SWuEG7A',
-    appId: '1:99193334676:android:8791138d3c0812679b7d81',
+    appId: '1:99193334676:android:06eb39671d7114469b7d81',
     messagingSenderId: '99193334676',
     projectId: 'coffee-app-mvp',
     storageBucket: 'coffee-app-mvp.firebasestorage.app',

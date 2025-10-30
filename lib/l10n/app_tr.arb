@@ -1,0 +1,76 @@
+{
+  "@@locale": "tr",
+
+  "nav_home": "Ana Sayfa",
+  "@nav_home": {
+    "description": "Navigasyon Menüsü - Ana Sayfa"
+  },
+  "nav_store": "Mağaza",
+  "nav_qr": "QR",
+  "nav_map": "Harita",
+  "nav_profile": "Profil",
+
+  "btn_add_to_cart": "Sepete Ekle",
+  "@btn_add_to_cart": {
+    "description": "Genel Butonlar"
+  },
+  "btn_order": "Sipariş Ver",
+  "btn_cancel": "İptal",
+  "btn_save": "Kaydet",
+  "btn_continue": "Devam Et",
+  "btn_back": "Geri",
+  "btn_confirm": "Onayla",
+  "btn_retry": "Tekrar Dene",
+  "btn_close": "Kapat",
+  "btn_edit": "Düzenle",
+  "btn_delete": "Sil",
+  "btn_view_all": "Tümünü Gör",
+  "btn_apply": "Uygula",
+  "btn_remove": "Kaldır",
+
+  "error_network": "Ağ bağlantısı hatası. Lütfen internet bağlantınızı kontrol edin.",
+  "@error_network": {
+    "description": "Hata Mesajları"
+  },
+  "error_server": "Sunucu hatası oluştu. Lütfen daha sonra tekrar deneyin.",
+  "error_unknown": "Beklenmeyen bir hata oluştu.",
+  "error_validation": "Lütfen girilen bilgileri kontrol edin.",
+  "error_auth": "Kimlik doğrulama başarısız. Lütfen tekrar deneyin.",
+  "error_permission": "Devam etmek için izin gerekli.",
+  "error_location": "Konum erişimi gerekli.",
+  "error_camera": "Kamera erişimi gerekli.",
+  "error_storage": "Depolama erişimi gerekli.",
+
+  "notif_order_placed": "Siparişiniz başarıyla verildi!",
+  "@notif_order_placed": {
+    "description": "Bildirim Mesajları"
+  },
+  "notif_order_confirmed": "Siparişiniz onaylandı.",
+  "notif_order_preparing": "Siparişiniz hazırlanıyor.",
+  "notif_order_ready": "Siparişiniz teslim almaya hazır!",
+  "notif_order_delivered": "Siparişiniz teslim edildi.",
+  "notif_order_cancelled": "Siparişiniz iptal edildi.",
+  "notif_item_added": "Ürün sepete eklendi.",
+  "notif_item_removed": "Ürün sepetten kaldırıldı.",
+  "notif_profile_updated": "Profil başarıyla güncellendi.",
+  "notif_payment_success": "Ödeme başarıyla tamamlandı.",
+  "notif_payment_failed": "Ödeme başarısız. Lütfen tekrar deneyin.",
+
+  "loading": "Yükleniyor...",
+  "@loading": {
+    "description": "Genel Terimler"
+  },
+  "please_wait": "Lütfen bekleyin...",
+  "no_data": "Veri bulunamadı",
+  "try_again": "Tekrar dene",
+  "search": "Ara",
+  "filter": "Filtrele",
+  "sort": "Sırala",
+  "refresh": "Yenile",
+  "settings": "Ayarlar",
+  "help": "Yardım",
+  "about": "Hakkında",
+  "contact": "İletişim",
+  "privacy": "Gizlilik Politikası",
+  "terms": "Kullanım Şartları"
+}

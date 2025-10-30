@@ -1,0 +1,76 @@
+{
+  "@@locale": "en",
+
+  "nav_home": "Home",
+  "@nav_home": {
+    "description": "Navigation Menu - Home"
+  },
+  "nav_store": "Store",
+  "nav_qr": "QR",
+  "nav_map": "Map",
+  "nav_profile": "Profile",
+
+  "btn_add_to_cart": "Add to Cart",
+  "@btn_add_to_cart": {
+    "description": "General Buttons"
+  },
+  "btn_order": "Order",
+  "btn_cancel": "Cancel",
+  "btn_save": "Save",
+  "btn_continue": "Continue",
+  "btn_back": "Back",
+  "btn_confirm": "Confirm",
+  "btn_retry": "Retry",
+  "btn_close": "Close",
+  "btn_edit": "Edit",
+  "btn_delete": "Delete",
+  "btn_view_all": "View All",
+  "btn_apply": "Apply",
+  "btn_remove": "Remove",
+
+  "error_network": "Network connection error. Please check your internet connection.",
+  "@error_network": {
+    "description": "Error Messages"
+  },
+  "error_server": "Server error occurred. Please try again later.",
+  "error_unknown": "An unexpected error occurred.",
+  "error_validation": "Please check the entered information.",
+  "error_auth": "Authentication failed. Please try again.",
+  "error_permission": "Permission required to continue.",
+  "error_location": "Location access is required.",
+  "error_camera": "Camera access is required.",
+  "error_storage": "Storage access is required.",
+
+  "notif_order_placed": "Your order has been placed successfully!",
+  "@notif_order_placed": {
+    "description": "Notification Messages"
+  },
+  "notif_order_confirmed": "Your order has been confirmed.",
+  "notif_order_preparing": "Your order is being prepared.",
+  "notif_order_ready": "Your order is ready for pickup!",
+  "notif_order_delivered": "Your order has been delivered.",
+  "notif_order_cancelled": "Your order has been cancelled.",
+  "notif_item_added": "Item added to cart.",
+  "notif_item_removed": "Item removed from cart.",
+  "notif_profile_updated": "Profile updated successfully.",
+  "notif_payment_success": "Payment completed successfully.",
+  "notif_payment_failed": "Payment failed. Please try again.",
+
+  "loading": "Loading...",
+  "@loading": {
+    "description": "General Terms"
+  },
+  "please_wait": "Please wait...",
+  "no_data": "No data available",
+  "try_again": "Try again",
+  "search": "Search",
+  "filter": "Filter",
+  "sort": "Sort",
+  "refresh": "Refresh",
+  "settings": "Settings",
+  "help": "Help",
+  "about": "About",
+  "contact": "Contact",
+  "privacy": "Privacy Policy",
+  "terms": "Terms of Service"
+}
