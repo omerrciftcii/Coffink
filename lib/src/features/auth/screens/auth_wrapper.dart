@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../services/auth_service.dart';
-import 'login_screen.dart';
+import 'phone_login_screen.dart';
 import '../../home/screens/home_screen.dart';
 import '../../../utils/logger.dart';
 
@@ -24,8 +24,8 @@ class AuthWrapper extends StatelessWidget {
           Logger.navigation('Navigating to HomeScreen for authenticated user', name: 'AuthWrapper');
           return const HomeScreen();
         } else {
-          Logger.navigation('Navigating to LoginScreen for unauthenticated user', name: 'AuthWrapper');
-          return const LoginScreen();
+          Logger.navigation('Navigating to PhoneLoginScreen for unauthenticated user', name: 'AuthWrapper');
+          return PhoneLoginScreen();
         }
       },
     );

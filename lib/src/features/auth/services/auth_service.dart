@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../utils/logger.dart';
 
 class AuthService with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   User? _user;
 
   AuthService() {
@@ -83,6 +85,45 @@ class AuthService with ChangeNotifier {
     } catch (e) {
       Logger.authAction('Sign out failed', name: 'AuthService', error: e);
       rethrow;
+    }
+  }
+
+  Future<void> verifyPhoneNumber(String phoneNumber, BuildContext context, Function(String) codeSent) async {
+    await _auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await _auth.signInWithCredential(credential);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.message ?? 'Verification failed'),
+          ),
+        );
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        codeSent(verificationId);
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+  }
+
+  Future<void> signInWithOtp(String verificationId, String smsCode) async {
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+      verificationId: verificationId,
+      smsCode: smsCode,
+    );
+    await _auth.signInWithCredential(credential);
+  }
+
+  Future<void> saveUserDetails(String name, String surname, String email) async {
+    if (_user != null) {
+      await _firestore.collection('users').doc(_user!.uid).set({
+        'name': name,
+        'surname': surname,
+        'email': email,
+        'phoneNumber': _user!.phoneNumber,
+      });
     }
   }
 }
