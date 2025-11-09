@@ -65,4 +65,5 @@ class DefaultFirebaseOptions {
     projectId: 'coffee-app-mvp',
     storageBucket: 'coffee-app-mvp.firebasestorage.app',
   );
+
 }

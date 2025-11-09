@@ -27,6 +27,7 @@ class _MapScreenState extends State<MapScreen> {
   bool _hasMapError = false;
   String? _mapErrorMessage;
   Completer<GoogleMapController> _controller = Completer();
+  bool _initialCameraMoved = false;
 
   // Default location (Istanbul)
   static const LatLng _defaultLocation = LatLng(41.0082, 28.9784);
@@ -196,11 +197,11 @@ class _MapScreenState extends State<MapScreen> {
         onMapCreated: _onMapCreated,
         initialCameraPosition: CameraPosition(
           target: initialPosition,
-          zoom: 12.0,
+          zoom: 14.0,
         ),
         markers: _markers,
         myLocationEnabled: locationService.hasLocationPermission,
-        myLocationButtonEnabled: false,
+        myLocationButtonEnabled: true,
         compassEnabled: true,
         mapToolbarEnabled: false,
         onTap: (_) {
@@ -234,6 +235,21 @@ class _MapScreenState extends State<MapScreen> {
         _controller.complete(controller);
       }
       _mapController = controller;
+
+      // Center on user's current location at first open
+      final locationService = Provider.of<LocationService>(context, listen: false);
+      final userPos = locationService.currentPosition;
+      if (userPos != null && !_initialCameraMoved) {
+        _initialCameraMoved = true;
+        await _mapController!.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: LatLng(userPos.latitude, userPos.longitude),
+              zoom: 14.0,
+            ),
+          ),
+        );
+      }
     } catch (e, stackTrace) {
       // Report error to Crashlytics
       FirebaseCrashlytics.instance.recordError(

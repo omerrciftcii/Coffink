@@ -18,6 +18,7 @@ import '../../../services/data_service.dart';
 import 'shop_screen.dart';
 import 'map_screen.dart';
 import '../../qr/screens/qr_scanner_screen.dart';
+import '../../../utils/mock_nearby_cafe_importer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -194,6 +195,323 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: _onItemTapped,
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          try {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Yakındaki 12 kafe ekleniyor...')),
+            );
+            await MockNearbyCafeImporter().populateNearbyCafes();
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Kafeler başarıyla eklendi.')),
+              );
+              setState(() {}); // refresh nearby list
+            }
+          } catch (e) {
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('İçeri aktarım hatası: $e')),
+              );
+            }
+          }
+        },
+        child: const Icon(Icons.cloud_download),
+      ),
+    );
+  }
+
+  Widget _buildCoffeeGridHome(List<Coffee> coffees) {
+    if (coffees.isEmpty) {
+      return const SizedBox(
+        height: 200,
+        child: Center(child: Text('Uygun kahve yok')),
+      );
+    }
+
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.75,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+      ),
+      itemCount: coffees.length > 6 ? 6 : coffees.length,
+      itemBuilder: (context, index) {
+        final coffee = coffees[index];
+        return GestureDetector(
+          onTap: () {
+            dev.log('Coffee tapped: ${coffee.name}', name: 'HomeScreen', level: 800);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CoffeeDetailScreen(coffee: coffee),
+              ),
+            );
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(context).colorScheme.shadow.withOpacity(0.08),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                    child: Hero(
+                      tag: 'coffee_grid_${coffee.id}',
+                      child: Image.network(
+                        coffee.photoUrl,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                                  Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                                ],
+                              ),
+                            ),
+                            child: Icon(
+                              Icons.coffee,
+                              size: 40,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          coffee.name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          coffee.description,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const Spacer(),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                '${coffee.basePrice.toStringAsFixed(2)} TL',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 14,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: coffee.isAvailable ? Colors.green[100] : Colors.red[100],
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                coffee.isAvailable ? 'Mevcut' : 'Tükendi',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: coffee.isAvailable ? Colors.green[700] : Colors.red[700],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildCoffeeGridHome2(List<Coffee> coffees) {
+    if (coffees.isEmpty) {
+      return const SizedBox(
+        height: 200,
+        child: Center(child: Text('Uygun kahve yok')),
+      );
+    }
+
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.75,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+      ),
+      itemCount: coffees.length > 6 ? 6 : coffees.length,
+      itemBuilder: (context, index) {
+        final coffee = coffees[index];
+        return GestureDetector(
+          onTap: () {
+            dev.log('Coffee tapped: ${coffee.name}', name: 'HomeScreen', level: 800);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CoffeeDetailScreen(coffee: coffee),
+              ),
+            );
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(context).colorScheme.shadow.withOpacity(0.08),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                    child: Hero(
+                      tag: 'coffee_grid_${coffee.id}',
+                      child: Image.network(
+                        coffee.photoUrl,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                                  Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                                ],
+                              ),
+                            ),
+                            child: Icon(
+                              Icons.coffee,
+                              size: 40,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          coffee.name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          coffee.description,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const Spacer(),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                '${coffee.basePrice.toStringAsFixed(2)} TL',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 14,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: coffee.isAvailable ? Colors.green[100] : Colors.red[100],
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                coffee.isAvailable ? 'Mevcut' : 'Tükendi',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: coffee.isAvailable ? Colors.green[700] : Colors.red[700],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -293,7 +611,7 @@ class _CoffeeListState extends State<CoffeeList> {
                       const SizedBox(height: 32),
                       _buildSectionHeader('Popüler Kahveler'),
                       const SizedBox(height: 16),
-                      _buildCoffeeGrid(coffees),
+                      buildCoffeeGrid(context, coffees),
                     ],
                   ),
                 ),
@@ -374,58 +692,8 @@ class _CoffeeListState extends State<CoffeeList> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
-                        blurRadius: 20,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Icon(
-                          Icons.search,
-                          color: Theme.of(context).colorScheme.primary,
-                          size: 24,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Text(
-                          'Kahve ara...',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Icon(
-                          Icons.tune,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          size: 20,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // Search section removed per request; keeping header only
+                const SizedBox.shrink(),
               ],
             ),
           ),
@@ -766,19 +1034,18 @@ class _CoffeeListState extends State<CoffeeList> {
             child: Container(
               width: 170,
               margin: const EdgeInsets.only(right: 16),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Theme.of(context).colorScheme.shadow.withOpacity(0.08),
-                      blurRadius: 20,
-                      offset: const Offset(0, 8),
-                    ),
-                  ],
-                ),
-                child: Column(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).colorScheme.shadow.withOpacity(0.08),
+                    blurRadius: 20,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
+              child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ClipRRect(
@@ -880,29 +1147,33 @@ class _CoffeeListState extends State<CoffeeList> {
                             ),
                             const Spacer(),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  '${coffee.basePrice.toStringAsFixed(2)} ₺',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).colorScheme.primary,
-                                    fontSize: 16,
+                                Expanded(
+                                  child: Text(
+                                    '${coffee.basePrice.toStringAsFixed(2)} TL',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).colorScheme.primary,
+                                      fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                                if (coffee.isAvailable)
-                                  Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).colorScheme.primary,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Icon(
-                                      Icons.add,
-                                      color: Theme.of(context).colorScheme.onPrimary,
-                                      size: 16,
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: coffee.isAvailable ? Colors.green[100] : Colors.red[100],
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    coffee.isAvailable ? 'Mevcut' : 'Tukendi',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                      color: coffee.isAvailable ? Colors.green[700] : Colors.red[700],
                                     ),
                                   ),
+                                ),
                               ],
                             ),
                           ],
@@ -912,159 +1183,165 @@ class _CoffeeListState extends State<CoffeeList> {
                   ],
                 ),
               ),
-            ),
-          );
+            );
         },
       ),
     );
   }
+}
 
-  Widget _buildCoffeeGrid(List<Coffee> coffees) {
-    if (coffees.isEmpty) {
-      return const SizedBox(
-        height: 200,
-        child: Center(child: Text('Uygun kahve yok')),
-      );
-    }
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.75,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-      ),
-      itemCount: coffees.length > 6 ? 6 : coffees.length,
-      itemBuilder: (context, index) {
-        final coffee = coffees[index];
-        return GestureDetector(
-          onTap: () {
-            dev.log('Coffee tapped: ${coffee.name}', name: 'HomeScreen', level: 800);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CoffeeDetailScreen(coffee: coffee),
-              ),
-            );
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Theme.of(context).colorScheme.shadow.withOpacity(0.08),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
-                ),
-              ],
+
+
+
+
+
+// Shared grid builder used by CoffeeList
+Widget buildCoffeeGrid(BuildContext context, List<Coffee> coffees) {
+  if (coffees.isEmpty) {
+    return const SizedBox(
+      height: 200,
+      child: Center(child: Text('Uygun kahve yok')),
+    );
+  }
+
+  return GridView.builder(
+    shrinkWrap: true,
+    physics: const NeverScrollableScrollPhysics(),
+    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 2,
+      childAspectRatio: 0.75,
+      crossAxisSpacing: 16,
+      mainAxisSpacing: 16,
+    ),
+    itemCount: coffees.length > 6 ? 6 : coffees.length,
+    itemBuilder: (context, index) {
+      final coffee = coffees[index];
+      return GestureDetector(
+        onTap: () {
+          dev.log('Coffee tapped: ${coffee.name}', name: 'HomeScreen', level: 800);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CoffeeDetailScreen(coffee: coffee),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                    child: Hero(
-                      tag: 'coffee_grid_${coffee.id}',
-                      child: Image.network(
-                        coffee.photoUrl,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                                  Theme.of(context).colorScheme.primary.withOpacity(0.2),
-                                ],
-                              ),
+          );
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).colorScheme.shadow.withOpacity(0.08),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 3,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                  child: Hero(
+                    tag: 'coffee_grid_${coffee.id}',
+                    child: Image.network(
+                      coffee.photoUrl,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                                Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                              ],
                             ),
-                            child: Icon(
-                              Icons.coffee,
-                              size: 40,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          );
-                        },
-                      ),
+                          ),
+                          child: Icon(
+                            Icons.coffee,
+                            size: 40,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
-                Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          coffee.name,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+              ),
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        coffee.name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          coffee.description,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        coffee.description,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                         ),
-                        const Spacer(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '${coffee.basePrice.toStringAsFixed(2)} ₺',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const Spacer(),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              '${coffee.basePrice.toStringAsFixed(2)} TL',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Theme.of(context).colorScheme.primary,
                                 fontSize: 14,
                               ),
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: coffee.isAvailable 
-                                    ? Colors.green[100] 
-                                    : Colors.red[100],
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                coffee.isAvailable ? 'Mevcut' : 'Tükendi',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  color: coffee.isAvailable 
-                                      ? Colors.green[700] 
-                                      : Colors.red[700],
-                                ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: coffee.isAvailable ? Colors.green[100] : Colors.red[100],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              coffee.isAvailable ? 'Mevcut' : 'Tükendi',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: coffee.isAvailable ? Colors.green[700] : Colors.red[700],
                               ),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
 }
+
+

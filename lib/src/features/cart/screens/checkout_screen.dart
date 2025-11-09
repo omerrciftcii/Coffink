@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../services/cart_service.dart';
 import '../../order/services/order_service.dart';
@@ -200,10 +202,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   children: [
                     TextField(
                       controller: _addressController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Adres',
                         hintText: 'Tam adresinizi girin',
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.bookmark_added_outlined),
+                          tooltip: 'Kayıtlı adres seç',
+                          onPressed: _pickSavedAddress,
+                        ),
                       ),
                       maxLines: 3,
                     ),
@@ -244,6 +251,67 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ],
         ],
       ),
+    );
+  }
+
+  void _pickSavedAddress() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Adresler için giriş yapın')));
+      return;
+    }
+    await showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+      builder: (ctx) {
+        return SizedBox(
+          height: 400,
+          child: Column(
+            children: [
+              const SizedBox(height: 12),
+              const Text('Kayıtlı Adresler', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 12),
+              Expanded(
+                child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                  stream: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(user.uid)
+                      .collection('addresses')
+                      .orderBy('createdAt', descending: true)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    final docs = snapshot.data?.docs ?? [];
+                    if (docs.isEmpty) {
+                      return const Center(child: Text('Kayıtlı adres bulunamadı'));
+                    }
+                    return ListView.separated(
+                      itemCount: docs.length,
+                      separatorBuilder: (_, __) => const Divider(height: 1),
+                      itemBuilder: (context, index) {
+                        final d = docs[index].data();
+                        final label = d['label'] as String? ?? 'Adres';
+                        final full = d['fullAddress'] as String? ?? '';
+                        final line = label.isNotEmpty ? '$label — $full' : full;
+                        return ListTile(
+                          leading: const Icon(Icons.location_on_outlined),
+                          title: Text(line, maxLines: 2, overflow: TextOverflow.ellipsis),
+                          onTap: () {
+                            _addressController.text = full;
+                            Navigator.pop(ctx);
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'coffee_theme.dart';
 
 /// Service for managing application themes
@@ -24,75 +23,75 @@ class ThemeService extends ChangeNotifier {
 
   /// Get light theme with coffee colors and Material Design 3
   ThemeData get lightTheme {
-    final textTheme = GoogleFonts.nunitoSansTextTheme().copyWith(
-        displayLarge: GoogleFonts.nunitoSans(
+    final textTheme = ThemeData.light().textTheme.copyWith(
+        displayLarge: TextStyle(
           fontWeight: FontWeight.bold,
           color: CoffeeTheme.lightColorScheme.onSurface,
           locale: const Locale('tr', 'TR'),
         ),
-        displayMedium: GoogleFonts.nunitoSans(
+        displayMedium: TextStyle(
           fontWeight: FontWeight.w600,
           color: CoffeeTheme.lightColorScheme.onSurface,
           locale: const Locale('tr', 'TR'),
         ),
-        displaySmall: GoogleFonts.nunitoSans(
+        displaySmall: TextStyle(
           fontWeight: FontWeight.w600,
           color: CoffeeTheme.lightColorScheme.onSurface,
           locale: const Locale('tr', 'TR'),
         ),
-        headlineLarge: GoogleFonts.nunitoSans(
+        headlineLarge: TextStyle(
           fontWeight: FontWeight.bold,
           color: CoffeeTheme.lightColorScheme.onSurface,
           locale: const Locale('tr', 'TR'),
         ),
-        headlineMedium: GoogleFonts.nunitoSans(
+        headlineMedium: TextStyle(
           fontWeight: FontWeight.w600,
           color: CoffeeTheme.lightColorScheme.onSurface,
           locale: const Locale('tr', 'TR'),
         ),
-        headlineSmall: GoogleFonts.nunitoSans(
+        headlineSmall: TextStyle(
           fontWeight: FontWeight.w600,
           color: CoffeeTheme.lightColorScheme.onSurface,
           locale: const Locale('tr', 'TR'),
         ),
-        titleLarge: GoogleFonts.nunitoSans(
+        titleLarge: TextStyle(
           fontWeight: FontWeight.w600,
           color: CoffeeTheme.lightColorScheme.onSurface,
           locale: const Locale('tr', 'TR'),
         ),
-        titleMedium: GoogleFonts.nunitoSans(
+        titleMedium: TextStyle(
           fontWeight: FontWeight.w500,
           color: CoffeeTheme.lightColorScheme.onSurface,
           locale: const Locale('tr', 'TR'),
         ),
-        titleSmall: GoogleFonts.nunitoSans(
-          fontWeight: FontWeight.w500,
-          color: CoffeeTheme.lightColorScheme.onSurfaceVariant,
-          locale: const Locale('tr', 'TR'),
-        ),
-        bodyLarge: GoogleFonts.nunitoSans(
-          color: CoffeeTheme.lightColorScheme.onSurface,
-          locale: const Locale('tr', 'TR'),
-        ),
-        bodyMedium: GoogleFonts.nunitoSans(
-          color: CoffeeTheme.lightColorScheme.onSurface,
-          locale: const Locale('tr', 'TR'),
-        ),
-        bodySmall: GoogleFonts.nunitoSans(
-          color: CoffeeTheme.lightColorScheme.onSurfaceVariant,
-          locale: const Locale('tr', 'TR'),
-        ),
-        labelLarge: GoogleFonts.nunitoSans(
-          fontWeight: FontWeight.w500,
-          color: CoffeeTheme.lightColorScheme.onSurface,
-          locale: const Locale('tr', 'TR'),
-        ),
-        labelMedium: GoogleFonts.nunitoSans(
+        titleSmall: TextStyle(
           fontWeight: FontWeight.w500,
           color: CoffeeTheme.lightColorScheme.onSurfaceVariant,
           locale: const Locale('tr', 'TR'),
         ),
-        labelSmall: GoogleFonts.nunitoSans(
+        bodyLarge: TextStyle(
+          color: CoffeeTheme.lightColorScheme.onSurface,
+          locale: const Locale('tr', 'TR'),
+        ),
+        bodyMedium: TextStyle(
+          color: CoffeeTheme.lightColorScheme.onSurface,
+          locale: const Locale('tr', 'TR'),
+        ),
+        bodySmall: TextStyle(
+          color: CoffeeTheme.lightColorScheme.onSurfaceVariant,
+          locale: const Locale('tr', 'TR'),
+        ),
+        labelLarge: TextStyle(
+          fontWeight: FontWeight.w500,
+          color: CoffeeTheme.lightColorScheme.onSurface,
+          locale: const Locale('tr', 'TR'),
+        ),
+        labelMedium: TextStyle(
+          fontWeight: FontWeight.w500,
+          color: CoffeeTheme.lightColorScheme.onSurfaceVariant,
+          locale: const Locale('tr', 'TR'),
+        ),
+        labelSmall: TextStyle(
           fontWeight: FontWeight.w500,
           color: CoffeeTheme.lightColorScheme.outline,
           locale: const Locale('tr', 'TR'),
@@ -101,18 +100,22 @@ class ThemeService extends ChangeNotifier {
 
     return ThemeData(
       useMaterial3: true,
-      colorScheme: CoffeeTheme.lightColorScheme,
+      fontFamily: 'Gilroy',
+      scaffoldBackgroundColor: CoffeeTheme.lightColorScheme.background,
+      iconTheme: IconThemeData(
+        color: CoffeeTheme.lightColorScheme.onSurface,
+      ),
       
       // Typography with Turkish locale support
       textTheme: textTheme,
       
       // AppBar theme
       appBarTheme: AppBarTheme(
-        backgroundColor: CoffeeTheme.lightColorScheme.surface,
+        backgroundColor: CoffeeTheme.lightColorScheme.background,
         foregroundColor: CoffeeTheme.lightColorScheme.onSurface,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: GoogleFonts.nunitoSans(
+        titleTextStyle: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: CoffeeTheme.lightColorScheme.onSurface,
@@ -143,7 +146,7 @@ class ThemeService extends ChangeNotifier {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
-          textStyle: GoogleFonts.nunitoSans(
+          textStyle: TextStyle(
             fontWeight: FontWeight.w600,
             locale: const Locale('tr', 'TR'),
           ),
@@ -153,8 +156,8 @@ class ThemeService extends ChangeNotifier {
       // Text button theme
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: CoffeeTheme.lightColorScheme.secondary,
-          textStyle: GoogleFonts.nunitoSans(
+          foregroundColor: CoffeeTheme.lightColorScheme.primary,
+          textStyle: TextStyle(
             fontWeight: FontWeight.w500,
             locale: const Locale('tr', 'TR'),
           ),
@@ -169,7 +172,7 @@ class ThemeService extends ChangeNotifier {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
-          textStyle: GoogleFonts.nunitoSans(
+          textStyle: TextStyle(
             fontWeight: FontWeight.w500,
             locale: const Locale('tr', 'TR'),
           ),
@@ -197,11 +200,11 @@ class ThemeService extends ChangeNotifier {
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: CoffeeTheme.lightColorScheme.primary, width: 2),
         ),
-        labelStyle: GoogleFonts.nunitoSans(
+        labelStyle: TextStyle(
           color: CoffeeTheme.lightColorScheme.onSurfaceVariant,
           locale: const Locale('tr', 'TR'),
         ),
-        hintStyle: GoogleFonts.nunitoSans(
+        hintStyle: TextStyle(
           color: CoffeeTheme.lightColorScheme.outline,
           locale: const Locale('tr', 'TR'),
         ),
@@ -209,14 +212,14 @@ class ThemeService extends ChangeNotifier {
       
       // Floating action button theme
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: CoffeeTheme.lightColorScheme.secondary,
-        foregroundColor: CoffeeTheme.lightColorScheme.onSecondary,
+        backgroundColor: CoffeeTheme.lightColorScheme.primary,
+        foregroundColor: CoffeeTheme.lightColorScheme.onPrimary,
         elevation: 4,
       ),
       
       // Divider theme
       dividerTheme: DividerThemeData(
-        color: CoffeeTheme.lightColorScheme.outline.withOpacity(0.5),
+        color: CoffeeTheme.lightColorScheme.outline,
         thickness: 1,
       ),
     );
@@ -224,75 +227,75 @@ class ThemeService extends ChangeNotifier {
 
   /// Get dark theme with coffee colors and Material Design 3
   ThemeData get darkTheme {
-    final textTheme = GoogleFonts.nunitoSansTextTheme().copyWith(
-        displayLarge: GoogleFonts.nunitoSans(
+    final textTheme = ThemeData.light().textTheme.copyWith(
+        displayLarge: TextStyle(
           fontWeight: FontWeight.bold,
           color: CoffeeTheme.darkColorScheme.onSurface,
           locale: const Locale('tr', 'TR'),
         ),
-        displayMedium: GoogleFonts.nunitoSans(
+        displayMedium: TextStyle(
           fontWeight: FontWeight.w600,
           color: CoffeeTheme.darkColorScheme.onSurface,
           locale: const Locale('tr', 'TR'),
         ),
-        displaySmall: GoogleFonts.nunitoSans(
+        displaySmall: TextStyle(
           fontWeight: FontWeight.w600,
           color: CoffeeTheme.darkColorScheme.onSurface,
           locale: const Locale('tr', 'TR'),
         ),
-        headlineLarge: GoogleFonts.nunitoSans(
+        headlineLarge: TextStyle(
           fontWeight: FontWeight.bold,
           color: CoffeeTheme.darkColorScheme.onSurface,
           locale: const Locale('tr', 'TR'),
         ),
-        headlineMedium: GoogleFonts.nunitoSans(
+        headlineMedium: TextStyle(
           fontWeight: FontWeight.w600,
           color: CoffeeTheme.darkColorScheme.onSurface,
           locale: const Locale('tr', 'TR'),
         ),
-        headlineSmall: GoogleFonts.nunitoSans(
+        headlineSmall: TextStyle(
           fontWeight: FontWeight.w600,
           color: CoffeeTheme.darkColorScheme.onSurface,
           locale: const Locale('tr', 'TR'),
         ),
-        titleLarge: GoogleFonts.nunitoSans(
+        titleLarge: TextStyle(
           fontWeight: FontWeight.w600,
           color: CoffeeTheme.darkColorScheme.onSurface,
           locale: const Locale('tr', 'TR'),
         ),
-        titleMedium: GoogleFonts.nunitoSans(
+        titleMedium: TextStyle(
           fontWeight: FontWeight.w500,
           color: CoffeeTheme.darkColorScheme.onSurface,
           locale: const Locale('tr', 'TR'),
         ),
-        titleSmall: GoogleFonts.nunitoSans(
-          fontWeight: FontWeight.w500,
-          color: CoffeeTheme.darkColorScheme.onSurfaceVariant,
-          locale: const Locale('tr', 'TR'),
-        ),
-        bodyLarge: GoogleFonts.nunitoSans(
-          color: CoffeeTheme.darkColorScheme.onSurface,
-          locale: const Locale('tr', 'TR'),
-        ),
-        bodyMedium: GoogleFonts.nunitoSans(
-          color: CoffeeTheme.darkColorScheme.onSurface,
-          locale: const Locale('tr', 'TR'),
-        ),
-        bodySmall: GoogleFonts.nunitoSans(
-          color: CoffeeTheme.darkColorScheme.onSurfaceVariant,
-          locale: const Locale('tr', 'TR'),
-        ),
-        labelLarge: GoogleFonts.nunitoSans(
-          fontWeight: FontWeight.w500,
-          color: CoffeeTheme.darkColorScheme.onSurface,
-          locale: const Locale('tr', 'TR'),
-        ),
-        labelMedium: GoogleFonts.nunitoSans(
+        titleSmall: TextStyle(
           fontWeight: FontWeight.w500,
           color: CoffeeTheme.darkColorScheme.onSurfaceVariant,
           locale: const Locale('tr', 'TR'),
         ),
-        labelSmall: GoogleFonts.nunitoSans(
+        bodyLarge: TextStyle(
+          color: CoffeeTheme.darkColorScheme.onSurface,
+          locale: const Locale('tr', 'TR'),
+        ),
+        bodyMedium: TextStyle(
+          color: CoffeeTheme.darkColorScheme.onSurface,
+          locale: const Locale('tr', 'TR'),
+        ),
+        bodySmall: TextStyle(
+          color: CoffeeTheme.darkColorScheme.onSurfaceVariant,
+          locale: const Locale('tr', 'TR'),
+        ),
+        labelLarge: TextStyle(
+          fontWeight: FontWeight.w500,
+          color: CoffeeTheme.darkColorScheme.onSurface,
+          locale: const Locale('tr', 'TR'),
+        ),
+        labelMedium: TextStyle(
+          fontWeight: FontWeight.w500,
+          color: CoffeeTheme.darkColorScheme.onSurfaceVariant,
+          locale: const Locale('tr', 'TR'),
+        ),
+        labelSmall: TextStyle(
           fontWeight: FontWeight.w500,
           color: CoffeeTheme.darkColorScheme.outline,
           locale: const Locale('tr', 'TR'),
@@ -301,7 +304,11 @@ class ThemeService extends ChangeNotifier {
 
     return ThemeData(
       useMaterial3: true,
-      colorScheme: CoffeeTheme.darkColorScheme,
+      fontFamily: 'Gilroy',
+      scaffoldBackgroundColor: CoffeeTheme.darkColorScheme.background,
+      iconTheme: IconThemeData(
+        color: CoffeeTheme.darkColorScheme.onSurface,
+      ),
       
       // Typography with Turkish locale support
       textTheme: textTheme,
@@ -312,7 +319,7 @@ class ThemeService extends ChangeNotifier {
         foregroundColor: CoffeeTheme.darkColorScheme.onSurface,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: GoogleFonts.nunitoSans(
+        titleTextStyle: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: CoffeeTheme.darkColorScheme.onSurface,
@@ -343,7 +350,7 @@ class ThemeService extends ChangeNotifier {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
-          textStyle: GoogleFonts.nunitoSans(
+          textStyle: TextStyle(
             fontWeight: FontWeight.w600,
             locale: const Locale('tr', 'TR'),
           ),
@@ -354,7 +361,7 @@ class ThemeService extends ChangeNotifier {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: CoffeeTheme.darkColorScheme.secondary,
-          textStyle: GoogleFonts.nunitoSans(
+          textStyle: TextStyle(
             fontWeight: FontWeight.w500,
             locale: const Locale('tr', 'TR'),
           ),
@@ -369,7 +376,7 @@ class ThemeService extends ChangeNotifier {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
-          textStyle: GoogleFonts.nunitoSans(
+          textStyle: TextStyle(
             fontWeight: FontWeight.w500,
             locale: const Locale('tr', 'TR'),
           ),
@@ -397,11 +404,11 @@ class ThemeService extends ChangeNotifier {
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: CoffeeTheme.darkColorScheme.primary, width: 2),
         ),
-        labelStyle: GoogleFonts.nunitoSans(
+        labelStyle: TextStyle(
           color: CoffeeTheme.darkColorScheme.onSurfaceVariant,
           locale: const Locale('tr', 'TR'),
         ),
-        hintStyle: GoogleFonts.nunitoSans(
+        hintStyle: TextStyle(
           color: CoffeeTheme.darkColorScheme.outline,
           locale: const Locale('tr', 'TR'),
         ),
@@ -496,3 +503,9 @@ class ThemeService extends ChangeNotifier {
     }
   }
 }
+
+
+
+
+
+

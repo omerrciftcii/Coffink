@@ -656,7 +656,8 @@ class _ShopScreenState extends State<ShopScreen> {
   }
 
   List<Coffee> _filterAndSortCoffees(List<Coffee> coffees) {
-    List<Coffee> filtered = coffees;
+    // Work on a mutable copy to avoid mutating provider streams
+    List<Coffee> filtered = List<Coffee>.of(coffees);
 
     // Filter by search query
     if (_searchQuery.isNotEmpty) {

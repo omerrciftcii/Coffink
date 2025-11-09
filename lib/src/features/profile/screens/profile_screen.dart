@@ -95,7 +95,7 @@ class ProfileScreen extends StatelessWidget {
               radius: 40,
               backgroundColor: Theme.of(context).colorScheme.primary,
               child: Text(
-                '${profile.firstName[0]}${profile.lastName[0]}',
+                '${profile.firstName.isNotEmpty ? profile.firstName[0] : '?'}${profile.lastName.isNotEmpty ? profile.lastName[0] : ''}',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
